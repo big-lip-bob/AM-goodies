@@ -1,5 +1,15 @@
 ChatLERP = not ChatLERP
-ChatLERPlocals = ChatLERP and setmetatable({print = log},{__index = _G}) or nil
+if not ChatLERPlocals then
+	local function separator(current,next,...)
+		if next then
+			return current," | ",separator(next,...)
+		else
+			return current
+		end
+	end
+	local function new_log(...) log(separator(...)) end
+	ChatLERPlocals = setmetatable({print = new_log,log = new_log},{__index = _G})
+end
 if not PCallHelper then
  local log,select = log,select
  function customunpack(iter_cout,striped,...)
