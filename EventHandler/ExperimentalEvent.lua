@@ -50,7 +50,7 @@
 		self_thread.pause()
 		-- unpaused by manager here
 		-- stop the thread that's meant to resume
-		if to_kill and to.kill.getStatus() == "running" then --[[to_kill.pause();]] to_kill.stop() end -- pausing then stopping doesn't prevent that shitty error fuck
+		if to_kill and to.kill_getStatus() == "running" then --[[to_kill.pause();]] to_kill.stop() end -- pausing then stopping doesn't prevent that shitty error fuck
 		mutex.lock(); remove_listeners(filter.pos); mutex.unlock() -- remove itself from the listeners
 		
 		if filter.args then
