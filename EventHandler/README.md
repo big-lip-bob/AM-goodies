@@ -13,5 +13,5 @@ When pulling for events, you can add filters the pusher will check agains't and 
 The implemented types as arguments are :
 * `nil` : always returns true
 * Strings, Numbers and Booleans (basic types) : will do a simple equality check
-* Tables : will check the truthyness of the value at the key of the argument
-* Functions : will pass the argument into the function, expects a condition
+* Tables : will check the truthyness of the value as the key for the table
+* Functions : will pass the argument into the function, expects a boolean
