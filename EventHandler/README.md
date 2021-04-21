@@ -1,12 +1,17 @@
 # TODO
-Finish my [OC Event API](https://ocdoc.cil.li/api:event) mimic
-* `event.timer(interval: number, callback: function ,[times: number]): cancelation id : number`
-* `event.listen(callback: function, filters: ...): cancelation id : number`
-* `event.ignore(cancelation id : number): boolean`
+* `event.timer(interval: number, callback: function ,[times: number]): cancelation id : tabme`
 
 # Functions
-* `event.pull([timeout: number], filters: ...): pusher's arguments: ...`
-* `event.push(arguments: ...): pusher's arguments: ...`
+* `event.pull(filters: ...): pusher's arguments: ...`
+* `event.pull_timed(timeout: number, filters: ...): pusher's arguments: ...`
+* `event.pull_after(callback: function, filters: ...): pusher's arguments: ...`
+* `event.pull_timed_after(timeout: number, callback: function, filters: ...): pusher's arguments: ...`
+* `event.push(arguments: ...): pusher's arguments`
+* `event.listen(callback: function, filters: ...): cancelation id : tabme`
+* `event.ignore(cancelation id : number)`
+
+* `event.new(mutex's name: string): event handler instance`
+Above functions apply to said new event handler but it has a separate listeners queue
 
 # Filters
 When pulling for events, you can add filters the pusher will check agains't and see if it should resume the puller or not
