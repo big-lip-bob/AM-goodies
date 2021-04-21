@@ -190,4 +190,16 @@ function event:cleanup()
 	self.mutex.unlock()
 end
 
+function event:killall()
+	self.mutex.lock()
+	for i = 1,#self.listeners do
+		local thread = self.listeners[i].thread
+		if thread.getStatus() ~= "dead" then
+			thread.stop()
+		end
+		self.listeners[i] = nil
+	end
+	self.mutex.unlock()
+end
+
 return event
