@@ -35,7 +35,7 @@ end
 
 
 function event:remove_listeners_mutexed(i)
-	self.mutex.lock(); event:remove_listeners(i); self.mutex.unlock()
+	self.mutex.lock(); self:remove_listeners(i); self.mutex.unlock()
 end
 
 function event:insert_listener(thread,...)
@@ -56,13 +56,13 @@ function event:pull(...)
 	local self_thread = get_thread()
 	
 	self.mutex.lock()
-	local filter = event:insert_listener(self_thread,...)
+	local filter = self:insert_listener(self_thread,...)
 	self.mutex.unlock()
 
 	self_thread.pause()
 	-- unpaused by manager here
 	
-	event:remove_listeners_mutexed(filter.pos)
+	self:remove_listeners_mutexed(filter.pos)
 	
 	if filter.args then return varargs_unpack(filter.args) end
 end
@@ -84,21 +84,21 @@ function event:pull_timed(timeout,...)
 	-- unpaused by manager here
 
 	if to_kill.getStatus() == "running" then --[[to_kill.pause();]] to_kill.stop() end
-	event:remove_listeners_mutexed(filter.pos)
+	self:remove_listeners_mutexed(filter.pos)
 	
 	if filter.args then return varargs_unpack(filter.args) end	
 end
 
 function event:pull_after(after,...)
 	self.mutex.lock()
-	local filter = event:insert_listener(thread,...)
+	local filter = self:insert_listener(thread,...)
 	after()
 	self.mutex.unlock()
 
 	self_thread.pause()
 	-- unpaused by manager here
 	
-	event:remove_listeners_mutexed(filter.pos)
+	self:remove_listeners_mutexed(filter.pos)
 	
 	if filter.argh then return varargs_unpack(filter.args) end
 end
@@ -107,7 +107,7 @@ function event:pull_timed_after(timeout,after,...)
 	local self_thread = get_thread()
 
 	self.mutex.lock()
-	local filter = event:insert_listener(self_thread,...)
+	local filter = self:insert_listener(self_thread,...)
 	after()
 	self.mutex.unlock()
 	
@@ -121,7 +121,7 @@ function event:pull_timed_after(timeout,after,...)
 	-- unpaused by manager here
 
 	if to_kill.getStatus() == "running" then --[[to_kill.pause();]] to_kill.stop() end
-	event:remove_listeners_mutexed(filter.pos)
+	self:remove_listeners_mutexed(filter.pos)
 	
 	if filter.args then return varargs_unpack(filter.args) end	
 end
@@ -129,7 +129,7 @@ end
 function event:listen(callback,...)
 	
 	self.mutex.lock()
-	local filter = event:insert_listener(nil,...)
+	local filter = self:insert_listener(nil,...)
 	local thread = new_thread(function()
 		local thread = get_thread() --or thread
 		while true do
@@ -151,7 +151,7 @@ end
 
 function event:cancel(filter)
 	filter.thread.stop()
-	event:remove_listeners_mutexed(filter.pos)
+	self:remove_listeners_mutexed(filter.pos)
 end
 
 function event:test_filters(filter,...)
@@ -168,12 +168,23 @@ function event:push(...)
 	self.mutex.lock()
 	for i = #self.listeners,1,-1 do
 		local filter = self.listeners[i]
-		if event:test_filters(filter,...) then
+		if self:test_filters(filter,...) then
 			filter.args = args
 			if filter.thread.getStatus() == "paused" then
 				filter.thread.unpause()
-			-- don't care for an else case, p much everything is mutexed so
+			else
+				self:cleanup() -- remove dead threads from listeners list
 			end
+		end
+	end
+	self.mutex.unlock()
+end
+
+function event:cleanup()
+	self.mutex.lock()
+	for i = #self.listeners,1,-1 do
+		if self.listeners[i].thread.getStatus() == "dead" then
+				self:remove_listeners(i)
 		end
 	end
 	self.mutex.unlock()
