@@ -128,17 +128,21 @@ end
 
 function event:listen(callback,...)
 	
+	self.mutex.lock()
 	local filter = event:insert_listener(nil,...)
 	local thread = new_thread(function()
 		local thread = get_thread() --or thread
 		while true do
 			thread.pause()
 			-- filter.args CANNOT be nil
+			self.mutex.lock()
 			callback(varargs_unpack(filter.args))
 			filter.args = nil
+			self.mutex.unlock()
 		end
 	end)
 	filter.thread = thread
+	self.mutex.unlock()
 
 	thread.start()
 	
@@ -168,9 +172,7 @@ function event:push(...)
 			filter.args = args
 			if filter.thread.getStatus() == "paused" then
 				filter.thread.unpause()
-			else -- unpaused by someone else or at worst even crashed in its sleep (yes)
-				log("Unexpected : Thread wasn't in paused status but remained in the listeners list")
-				--event:remove_listeners(i)
+			-- don't care for an else case, p much everything is mutexed so
 			end
 		end
 	end
