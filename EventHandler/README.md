@@ -20,3 +20,6 @@ The implemented types as arguments are :
 * Strings, Numbers and Booleans (basic types) : will do a simple equality check
 * Tables : will check the truthyness of the value as the key for the table
 * Functions : will pass the argument into the function, expects a boolean
+
+# Examples
+Soon, i don't have anything overly simple and that clearly demonstrates the superiority of the event handler (don't get me wrong, its already the superior solution)
