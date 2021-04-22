@@ -1,3 +1,7 @@
+# Setup
+Drop the Event Handler in your libs folder (default is `macros/libs`), and an entry where you Event Listener to Anything (you might want to filter out frequent events such as sounds or have one handler per event type so frequent events avoid triggerning other ones and iterating trough the whole parked listeners)
+Then use one of the pulling/listening functions in your wanted scripts
+
 # TODO
 * `event.timer(interval: number, callback: function ,[times: number]): cancelation id : tabme`
 
