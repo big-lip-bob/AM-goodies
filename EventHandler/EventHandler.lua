@@ -172,8 +172,8 @@ function event:push(...)
 			filter.args = args
 			if filter.thread.getStatus() == "paused" then
 				filter.thread.unpause()
-			else
-				self:cleanup() -- remove dead threads from listeners list
+			elseif self.listeners[i].thread.getStatus() == "dead" then
+				self:remove_listeners(i)
 			end
 		end
 	end
