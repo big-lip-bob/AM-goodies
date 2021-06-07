@@ -1,14 +1,16 @@
-local type,select,setmetatable = type,select,setmetatable
-local newMutex = newMutex
-local function new(mutex_name)
-	return {
+local type,select,setmetatable,newMutex = type,select,setmetatable,newMutex
+
+local event = {
+	mutex = newMutex("__EVENT-BOB-GLOBAL"),
+	listeners = {}
+}
+event.__index = event
+function event:new(mutex_name)
+	return setmetatable({
 		mutex = newMutex(mutex_name),
 		listeners = {}
-	}
+	},self)
 end
-local event = new("__EVENT_HANDLER_BOB")
-event.__index = event
-function event:new(mutex_name) return setmetatable(new(mutex_name),self) end
 
 --event.__DEBUG = { listeners = listeners }
 
@@ -47,7 +49,6 @@ function event:insert_listener(thread,...)
 	
 	return filter
 end
-
 
 
 local get_thread,new_thread = thread.current,thread.new
@@ -100,7 +101,7 @@ function event:pull_after(after,...)
 	
 	self:remove_listeners_mutexed(filter.pos)
 	
-	if filter.argh then return varargs_unpack(filter.args) end
+	if filter.args then return varargs_unpack(filter.args) end
 end
 
 function event:pull_timed_after(timeout,after,...)
@@ -149,9 +150,9 @@ function event:listen(callback,...)
 	return filter
 end
 
-function event:cancel(filter)
-	filter.thread.stop()
-	self:remove_listeners_mutexed(filter.pos)
+function event:cancel(subscriber)
+	subscriber.thread.stop()
+	self:remove_listeners_mutexed(subscriber.pos)
 end
 
 function event:test_filters(filter,...)
@@ -184,13 +185,13 @@ function event:cleanup()
 	self.mutex.lock()
 	for i = #self.listeners,1,-1 do
 		if self.listeners[i].thread.getStatus() == "dead" then
-				self:remove_listeners(i)
+			self:remove_listeners(i)
 		end
 	end
 	self.mutex.unlock()
 end
 
-function event:killall()
+function event:kill_all()
 	self.mutex.lock()
 	for i = 1,#self.listeners do
 		local thread = self.listeners[i].thread
