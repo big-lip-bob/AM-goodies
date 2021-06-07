@@ -2,19 +2,21 @@
 Drop the Event Handler in your libs folder (default is `macros/libs`), and make an entry where you bind the Event Listener to Anything (you might want to filter out frequent events such as sounds (TODO: or have one handler per event type so frequent events avoid triggerning other ones and iterating trough the whole parked listeners))
 Then use one of the pulling/listening functions in your wanted scripts
 
+Its recommended to use the Event Splitter
+
 # TODO
-* `event.timer(interval: number, callback: function ,[times: number]): cancelation id : tabme`
+* `event:timer(interval: number, callback: function ,[times: number]): cancelation identifier : table`
 
 # Functions
-* `event.pull(filters: ...): pusher's arguments: ...`
-* `event.pull_timed(timeout: number, filters: ...): pusher's arguments: ...`
-* `event.pull_after(callback: function, filters: ...): pusher's arguments: ...`
-* `event.pull_timed_after(timeout: number, callback: function, filters: ...): pusher's arguments: ...`
-* `event.push(arguments: ...): pusher's arguments`
-* `event.listen(callback: function, filters: ...): cancelation id : tabme`
-* `event.ignore(cancelation id : number)`
+* `event:pull(filters: ...): pusher's arguments: ...`
+* `event:pull_timed(timeout: number, filters: ...): pusher's arguments: ...`
+* `event:pull_after(callback: function, filters: ...): pusher's arguments: ...`
+* `event:pull_timed_after(timeout: number, callback: function, filters: ...): pusher's arguments: ...`
+* `event:push(arguments: ...): pusher's arguments`
+* `event:listen(callback: function, filters: ...): cancelation identifier : table`
+* `event:cancel(cancelation identifier: table)`
 
-* `event.new(mutex's name: string): event handler instance`
+* `event:new(mutex's name: string): event handler instance`
 Above functions apply to said new event handler but it has a separate listeners queue
 
 # Filters
