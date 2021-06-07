@@ -9,7 +9,7 @@ local per_event = setmetatable({},{__index =
 	end
 })
 
-local event_splitter = {}
+local event_splitter = {keys = per_event}
 
 function event_splitter:pull(name,...) return per_event[name]:pull(...) end
 function event_splitter:pull_timed(timeout,name,...) return per_event[name]:pull_timed(timeout,...) end
@@ -32,7 +32,8 @@ function event_splitter:kill(name) per_event[name]:killall() end
 
 local pairs = pairs
 function event_splitter:cleanup_all() for k,v in pairs(per_event) do v:cleanup() end end
-function event_splitter:kill_all() for k,v in pairs(per_event) do v:killall() end end
+function event_splitter:kill_all() for k,v in pairs(per_event) do v:kill_all() end end
 
+log("&6[EventHandler] Event Splitter set up")
 
 return event_splitter

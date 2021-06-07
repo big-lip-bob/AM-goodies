@@ -204,4 +204,6 @@ function event:kill_all()
 	self.mutex.unlock()
 end
 
+log("&6[EventHandler] Event Handler set up")
+
 return event
