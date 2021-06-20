@@ -40,7 +40,7 @@ else
 				local block = hudBlock(bx,py,bz)
 				block.setColor(0xCC0000)
 				block.setOpacity(1)
-				block.xray(true)
+				--block.xray(true)
 				block.enableDraw()
 				
 				local block = hudBlock(bx,cy,bz)
