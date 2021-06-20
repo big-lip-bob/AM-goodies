@@ -165,7 +165,7 @@ function event:test_filters(filter,...)
 end
 
 function event:push(...)
-	if #self.listeners == 0 then return end
+	if #self.listeners == 0 then return end -- not unsound ?
 	local args = varags_pack(...) -- could be lazyly init but cba
 	self.mutex.lock()
 	for i = #self.listeners,1,-1 do

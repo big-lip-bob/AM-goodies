@@ -10,10 +10,10 @@ local per_event = setmetatable({},{__index = function(self,key)
 
 local event_splitter = {keys = per_event}
 
-function event_splitter:pull(name,...) return per_event[name]:pull(...) end
-function event_splitter:pull_timed(timeout,name,...) return per_event[name]:pull_timed(timeout,...) end
-function event_splitter:pull_after(after,name,...) return per_event[name]:pull_after(after,...) end
-function event_splitter:pull_timed_after(timeout,after,name,...) return per_event[name]:pull_timed_after(timeout,after,...) end
+function event_splitter:pull(name,...) return per_event[name]:pull(nil,...) end
+function event_splitter:pull_timed(timeout,name,...) return per_event[name]:pull_timed(timeout,nil,...) end
+function event_splitter:pull_after(after,name,...) return per_event[name]:pull_after(after,nil,...) end
+function event_splitter:pull_timed_after(timeout,after,name,...) return per_event[name]:pull_timed_after(timeout,after,nil,...) end
 
 function event_splitter:listen(callback,name,...)
 	local subscriber = per_event[name]:listen(callback,nil,...)
