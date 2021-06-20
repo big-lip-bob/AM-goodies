@@ -1,9 +1,8 @@
 local event_handler = require("EventHandler")
 
 local type = type
-local per_event = setmetatable({},{__index =
-	function(self,key)
-		if type(key) ~= "string" then error("The first argument must be a string") end
+local per_event = setmetatable({},{__index = function(self,key)
+		if type(key) ~= "string" then error("The first argument must be a string, got : "..tostring(key)) end
 		self[key] = event_handler:new("__EVENT-SPLITTER="..key)
 		return self[key]
 	end
@@ -17,7 +16,7 @@ function event_splitter:pull_after(after,name,...) return per_event[name]:pull_a
 function event_splitter:pull_timed_after(timeout,after,name,...) return per_event[name]:pull_timed_after(timeout,after,...) end
 
 function event_splitter:listen(callback,name,...)
-	local subscriber = per_event[name]:listen(...)
+	local subscriber = per_event[name]:listen(callback,nil,...)
 	subscriber.event_name = name
 	return subscriber
 end
@@ -25,7 +24,7 @@ function event_splitter:cancel(subscriber)
 	per_event[subscriber.event_name]:cancel(subscriber)
 end
 
-function event_splitter:push(name,...) per_event[name]:push(...) end
+function event_splitter:push(name,...) per_event[name]:push(name,...) end
 
 function event_splitter:cleanup(name) per_event[name]:cleanup() end
 function event_splitter:kill(name) per_event[name]:killall() end
