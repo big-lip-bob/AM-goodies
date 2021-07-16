@@ -1,11 +1,6 @@
 # Setup
-Drop the Event Handler in your libs folder (default is `macros/libs`), and make an entry where you bind the Event Listener to Anything (you might want to filter out frequent events such as sounds (TODO: or have one handler per event type so frequent events avoid triggerning other ones and iterating trough the whole parked listeners))
-Then use one of the pulling/listening functions in your wanted scripts
-
-Its recommended to use the Event Splitter
-
-# TODO
-* `event:timer(interval: number, callback: function ,[times: number]): cancelation identifier : table`
+Drop the Event Handler in your libs folder (default is `macros/libs`), and make an entry where you bind the Event Listener to Anything (Optionally Chat too as its not included in the Anything group) (you might want to filter out frequent events such as sounds (altough i provide an event splitter which is the recommended and default variant, that will avoid looking into unrelated parked filters))
+Then feel free to use one of the pulling/listening functions in your wanted scripts
 
 # Functions
 * `event:pull(filters: ...): pusher's arguments: ...`
@@ -18,6 +13,9 @@ Its recommended to use the Event Splitter
 
 * `event:new(mutex's name: string): event handler instance`
 Above functions apply to said new event handler but it has a separate listeners queue
+
+# TODO
+* `event:timer(interval: number, callback: function ,[times: number]): cancelation identifier : table`
 
 # Filters
 When pulling for events, you can add filters the pusher will check agains't and see if it should resume the puller or not
