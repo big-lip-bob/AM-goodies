@@ -1,12 +1,8 @@
 local event = require("EventSplitter")
 
 local function safe_get(t,k,...)
-	if t then
-		if k then
-			return safe_get(t[k],...)
-		else
-			return t
-		end
+	if t and k ~= nil then
+		return safe_get(t[k],...)
 	else
 		return t
 	end
