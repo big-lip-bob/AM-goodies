@@ -1,5 +1,9 @@
 # Setup
-Drop the Event Handler in your libs folder (default is `macros/libs`), and make an entry where you bind the Event Listener to Anything (Optionally Chat too as its not included in the Anything group) (you might want to filter out frequent events such as sounds (or combine your handler implementation of choice with the Event Splitter))
+Drop the Event Handler in your libs folder (default is `macros/libs`)
+**Very Important** : Make an entry where you bind the Event Listener to Anything (Optionally Chat too as its not included in the Anything group)
+(you might want to filter out frequent events such as sounds (or combine your handler implementation of choice with the Event Splitter))
+Then push the received events to the event handler : `require("EventCollector"):push(select(... == "event" and 2 or 1,...))`
+
 Then feel free to use one of the pulling/listening functions in your wanted scripts
 
 # Functions
