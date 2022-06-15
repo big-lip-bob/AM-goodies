@@ -21,6 +21,7 @@ Then feel free to use one of the pulling/listening functions in your wanted scri
 # TODO
 * ~~`event:timer(interval: number, callback: function ,[times: number]): cancelation identifier : table`~~ Delegated to `timer` library
 * Timer library for `timed` methods (`pull_timed`, `pull_timed_after`, `listen_timed`, `listen_timed_times`)
+* Switch to using a Java sided implementation of a fully concurent lock free doubly linked list (highly theorical race conditions where events do skip) (Also would avoid LuaJ crashing horribly and taking the entire JVM with itself)
 
 # Filters
 When pulling for events, you can add filters the pusher will check agains't and see if it should resume the puller or not
